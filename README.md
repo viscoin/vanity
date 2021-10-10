@@ -8,6 +8,7 @@ npm run setup
 Create a `.env` file in the root of the project. Set target to what the address should start with.
 ```
 target=abc
+threads=0
 ```
 Start searching...
 ```

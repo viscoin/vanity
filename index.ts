@@ -20,9 +20,11 @@ if (isMainThread) {
         err('Target is invalid base58!')
     }
     const target = process.env.target.toLowerCase()
+    const threads = parseInt(process.env.threads) || cpus().length
     console.log('Searching for addresses starting with:', target)
+    console.log('Threads:', threads)
     let j = 0
-    for (let i = 0; i < cpus().length; i++) {
+    for (let i = 0; i < threads; i++) {
         const worker = new Worker(__filename)
         worker.on('message', e => {
             if (e) {
