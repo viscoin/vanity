@@ -1,0 +1,29 @@
+{
+  "name": "vanity",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "c": "tsc",
+    "setup": "npm i && tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/0s8/vanity.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/0s8/vanity/issues"
+  },
+  "homepage": "https://github.com/0s8/vanity#readme",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "viscoin": "^1.7.3"
+  },
+  "devDependencies": {
+    "@types/node": "^15.12.4",
+    "typescript": "^4.3.4"
+  }
+}
