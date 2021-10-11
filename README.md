@@ -5,9 +5,9 @@ Install packages and compile typescript.
 ```
 npm run setup
 ```
-Create a `.env` file in the root of the project. Set target to what the address should start with.
+Create a `.env` file in the root of the project. Set filter to what the address should start with. Multiple targets are separated by space.
 ```
-target=abc
+filter=fast ninja
 threads=0
 ```
 Start searching...

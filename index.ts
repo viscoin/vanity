@@ -11,17 +11,20 @@ if (isMainThread) {
         console.log(e)
         process.exit(0)
     }
-    try {
-        if (!process.env.target) err('You must specify target!')
-        if (process.env.target.startsWith('1')) err(`Addresses can't start with 1!`)
-        base58.decode(process.env.target)
+    const filter = []
+    if (!process.env.filter) err('You must specify filter!')
+    for (const string of process.env.filter.split(' ')) {
+        if (string.startsWith('1')) err(`Addresses can't start with 1!`)
+        try {
+            base58.decode(string)
+        }
+        catch {
+            err(`Filter has target with invalid base58: ${string}`)
+        }
+        filter.push(string.toLowerCase())
     }
-    catch {
-        err('Target is invalid base58!')
-    }
-    const target = process.env.target.toLowerCase()
     const threads = parseInt(process.env.threads) || cpus().length
-    console.log('Searching for addresses starting with:', target)
+    console.log('Searching for addresses starting with:', filter)
     console.log('Threads:', threads)
     let j = 0
     for (let i = 0; i < threads; i++) {
@@ -36,7 +39,7 @@ if (isMainThread) {
             }
             j++
         })
-        worker.postMessage(JSON.stringify(target))
+        worker.postMessage(JSON.stringify(filter))
     }
     setInterval(() => {
         console.log(j, 'A/s')
@@ -45,14 +48,16 @@ if (isMainThread) {
 }
 else {
     parentPort.once('message', e => {
-        const target = JSON.parse(e)
+        const filter = JSON.parse(e)
         while (true) {
             parentPort.postMessage(0)
             const privateKey = keygen()
             const publicKey = publicKeyFromPrivateKey(privateKey)
             const address = Address.toString(addressFromPublicKey(publicKey))
-            if (address.toLowerCase().startsWith(target)) {
-                parentPort.postMessage(JSON.stringify(base58.encode(privateKey)))
+            for (const string of filter) {
+                if (address.toLowerCase().startsWith(string)) {
+                    parentPort.postMessage(JSON.stringify(base58.encode(privateKey)))
+                }
             }
         }
     })
